@@ -137,7 +137,7 @@
                 <artifactId>spring-boot-maven-plugin</artifactId>
                 <version>${spring-boot.version}</version>
                 <configuration>
-                    <mainClass>by.piskunou.solvdlaba.MicroAirportLocationApplication</mainClass>
+                    <mainClass>by.piskunou.solvdlaba.AuthenticationServiceApplication</mainClass>
                     <layout>JAR</layout>
                     <excludes>
                         <exclude>
