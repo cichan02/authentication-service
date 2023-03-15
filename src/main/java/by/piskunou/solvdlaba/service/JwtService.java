@@ -2,21 +2,22 @@ package by.piskunou.solvdlaba.service;
 
 import by.piskunou.solvdlaba.domain.UserDetailsImpl;
 import org.springframework.security.core.userdetails.UserDetails;
+import reactor.core.publisher.Mono;
 
 public interface JwtService {
 
-    String extractUsername(String jwt);
+    Mono<String> extractUsername(String jwt);
 
-    String generateAccessToken(UserDetailsImpl userDetails);
+    Mono<String> generateAccessToken(UserDetailsImpl userDetails);
 
-    String generateRefreshToken(UserDetails userDetails);
+    Mono<String> generateRefreshToken(UserDetails userDetails);
 
-    String generateEditPasswordToken(UserDetails userDetails);
+    Mono<String> generateEditPasswordToken(UserDetails userDetails);
 
-    boolean isValidAccessToken(String jwt);
+    Mono<Boolean> isValidAccessToken(String jwt);
 
-    boolean isValidRefreshToken(String jwt);
+    Mono<Boolean> isValidRefreshToken(String jwt);
 
-    boolean isValidEditPasswordToken(String jwt);
+    Mono<Boolean> isValidEditPasswordToken(String jwt);
 
 }

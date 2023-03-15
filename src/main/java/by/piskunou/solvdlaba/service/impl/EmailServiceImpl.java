@@ -3,6 +3,7 @@ package by.piskunou.solvdlaba.service.impl;
 import by.piskunou.solvdlaba.service.EmailService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import reactor.core.publisher.Mono;
 
 import java.util.Map;
 
@@ -11,8 +12,8 @@ import java.util.Map;
 public class EmailServiceImpl implements EmailService {
 
     @Override
-    public void sendMessage(String email, Map<String, Object> templateModel) {
-
+    public Mono<Void> sendMessage(String email, Map<String, Object> templateModel) {
+        return Mono.empty();
     }
 
 }
