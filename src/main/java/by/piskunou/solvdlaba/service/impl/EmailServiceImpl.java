@@ -1,18 +1,32 @@
 package by.piskunou.solvdlaba.service.impl;
 
+import by.piskunou.solvdlaba.domain.SendEmailEvent;
 import by.piskunou.solvdlaba.service.EmailService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import reactor.core.publisher.Mono;
-
-import java.util.Map;
+import reactor.kafka.sender.KafkaSender;
+import reactor.kafka.sender.SenderRecord;
 
 @Service
 @RequiredArgsConstructor
 public class EmailServiceImpl implements EmailService {
 
+    private final KafkaSender<String, SendEmailEvent> sender;
+
     @Override
-    public Mono<Void> sendMessage(String email, Map<String, Object> templateModel) {
+    public Mono<Void> sendMessage(SendEmailEvent sendEmailEvent) {
+        sender.send(
+                Mono.just(
+                        SenderRecord.create(
+                                "sendEmail",
+                                0,
+                                System.currentTimeMillis(),
+                                "key",
+                                sendEmailEvent,
+                                null
+                        )))
+                .subscribe();
         return Mono.empty();
     }
 
