@@ -2,13 +2,14 @@ package by.piskunou.solvdlaba.service;
 
 import by.piskunou.solvdlaba.domain.AuthEntity;
 import by.piskunou.solvdlaba.domain.Password;
+import reactor.core.publisher.Mono;
 
 public interface AuthService {
 
-    AuthEntity refresh(AuthEntity authEntity);
+    Mono<AuthEntity> refresh(AuthEntity authEntity);
 
-    void createPassword(String email);
+    Mono<Void> createPassword(String email);
 
-    void editPassword(String token, Password password);
+    Mono<Void> editPassword(String token, Password password);
 
 }

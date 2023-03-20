@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<consumer>
+    <groupId>authentication-producer-1</groupId>
+    <keySerializer>org.apache.kafka.common.serialization.StringSerializer</keySerializer>
+    <valueSerializer>org.springframework.kafka.support.serializer.JsonSerializer</valueSerializer>
+</consumer>

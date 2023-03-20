@@ -1,15 +1,15 @@
 package by.piskunou.solvdlaba.service;
 
-import by.piskunou.solvdlaba.domain.UserDetailsImpl;
+import by.piskunou.solvdlaba.domain.User;
 import org.springframework.security.core.userdetails.UserDetails;
 
 public interface JwtService {
 
     String extractUsername(String jwt);
 
-    String generateAccessToken(UserDetailsImpl userDetails);
+    String generateAccessToken(User user);
 
-    String generateRefreshToken(UserDetails userDetails);
+    String generateRefreshToken(User user);
 
     String generateEditPasswordToken(UserDetails userDetails);
 

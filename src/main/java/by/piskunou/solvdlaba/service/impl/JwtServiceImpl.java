@@ -1,6 +1,6 @@
 package by.piskunou.solvdlaba.service.impl;
 
-import by.piskunou.solvdlaba.domain.UserDetailsImpl;
+import by.piskunou.solvdlaba.domain.User;
 import by.piskunou.solvdlaba.service.JwtService;
 import com.auth0.jwt.JWT;
 import com.auth0.jwt.algorithms.Algorithm;
@@ -27,22 +27,22 @@ public class JwtServiceImpl implements JwtService {
     }
 
     @Override
-    public String generateAccessToken(UserDetailsImpl userDetails) {
+    public String generateAccessToken(User user) {
         return JWT.create()
-                  .withSubject("Access token")
-                  .withClaim("username", userDetails.getUsername())
-                  .withClaim("email", userDetails.getUser().getEmail())
-                  .withIssuer("Airport")
-                  .withIssuedAt(Instant.now())
-                  .withExpiresAt( ZonedDateTime.now().plusHours(1).toInstant() )
-                  .sign(Algorithm.HMAC256(secretKey));
+                .withSubject("Access token")
+                .withClaim("username", user.getUsername())
+                .withClaim("email", user.getEmail())
+                .withIssuer("Airport")
+                .withIssuedAt(Instant.now())
+                .withExpiresAt( ZonedDateTime.now().plusHours(1).toInstant() )
+                .sign(Algorithm.HMAC256(secretKey));
     }
 
     @Override
-    public String generateRefreshToken(UserDetails userDetails) {
+    public String generateRefreshToken(User user) {
         return JWT.create()
                   .withSubject("Refresh token")
-                  .withClaim("username", userDetails.getUsername())
+                  .withClaim("username", user.getUsername())
                   .withIssuer("Airport")
                   .withIssuedAt(Instant.now())
                   .withExpiresAt( ZonedDateTime.now().plusWeeks(1).toInstant() )

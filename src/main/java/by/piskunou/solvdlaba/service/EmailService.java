@@ -1,9 +1,10 @@
 package by.piskunou.solvdlaba.service;
 
-import java.util.Map;
+import by.piskunou.solvdlaba.domain.event.SendEmailEvent;
+import reactor.core.publisher.Mono;
 
 public interface EmailService {
 
-    void sendMessage(String email, Map<String, Object> templateModel);
+    Mono<Void> sendMessage(SendEmailEvent sendEmailEvent);
 
 }
