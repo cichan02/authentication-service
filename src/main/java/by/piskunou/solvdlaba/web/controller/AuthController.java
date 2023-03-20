@@ -48,14 +48,14 @@ public class AuthController {
     @GetMapping("/extract-username")
     @Operation(summary = "Extract username from jwt-token")
     @Parameter(name = "jwt", description = "jwt token")
-    public Mono<String> extractUsername(@RequestParam("jwt_token") String jwt) {
+    public String extractUsername(@RequestParam("jwt_token") String jwt) {
         return jwtService.extractUsername(jwt);
     }
 
     @GetMapping("/valid-access-token")
     @Operation(summary = "Validate access token")
     @Parameter(name = "jwt", description = "Access jwt token")
-    public Mono<Boolean> isValidAccessToken(@RequestParam("jwt_token") String jwt) {
+    public boolean isValidAccessToken(@RequestParam("jwt_token") String jwt) {
         return jwtService.isValidAccessToken(jwt);
     }
 
@@ -69,14 +69,14 @@ public class AuthController {
     @PostMapping("/generate-token/access")
     @Operation(summary = "Generate access token")
     @Parameter(name = "userDetails", description = "User's details for generating access token")
-    public Mono<String> generateAccessToken(@RequestBody User user) {
+    public String generateAccessToken(@RequestBody User user) {
         return jwtService.generateAccessToken(user);
     }
 
     @PostMapping("/generate-token/refresh")
     @Operation(summary = "Generate refresh token")
     @Parameter(name = "userDetails", description = "User's details for generating refresh token")
-    public Mono<String> generateRefreshToken(@RequestBody User user) {
+    public String generateRefreshToken(@RequestBody User user) {
         return jwtService.generateRefreshToken(user);
     }
 

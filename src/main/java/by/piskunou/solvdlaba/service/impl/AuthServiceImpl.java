@@ -2,6 +2,7 @@ package by.piskunou.solvdlaba.service.impl;
 
 import by.piskunou.solvdlaba.domain.AuthEntity;
 import by.piskunou.solvdlaba.domain.Password;
+import by.piskunou.solvdlaba.domain.User;
 import by.piskunou.solvdlaba.domain.UserDetailsImpl;
 import by.piskunou.solvdlaba.domain.event.SendEmailEvent;
 import by.piskunou.solvdlaba.domain.event.UpdatePasswordEvent;
@@ -30,14 +31,13 @@ public class AuthServiceImpl implements AuthService {
         if ( !jwtService.isValidRefreshToken( authEntity.getRefreshToken() )) {
             throw new AccessDeniedException("Access denied");
         }
-        return jwtService.extractUsername( authEntity.getRefreshToken() )
-                .flatMap(userService::findByUsername)
-                .flatMap(jwtService::generateAccessToken)
-                .flatMap(accessToken -> {
+        String username = jwtService.extractUsername( authEntity.getRefreshToken() );
+        return userService.findByUsername(username)
+                .flatMap(user -> {
+                    String accessToken = jwtService.generateAccessToken(user);
                     authEntity.setAccessToken( accessToken );
-                    return Mono.just(authEntity);
+                    return Mono.just( authEntity );
                 });
-
     }
 
     @Override
@@ -61,15 +61,13 @@ public class AuthServiceImpl implements AuthService {
         if ( !jwtService.isValidEditPasswordToken(token) ) {
             throw new JWTVerificationException("Invalid token");
         }
-        return jwtService.extractUsername(token)
-                .flatMap(username -> {
-                    UpdatePasswordEvent updatePasswordEvent = UpdatePasswordEvent.builder()
-                            .uuid( UUID.randomUUID() )
-                            .username(username)
-                            .password( password.getNewPassword() )
-                            .build();
-                    return userService.updatePasswordByUsername(updatePasswordEvent) ;
-                });
+        String username =  jwtService.extractUsername(token);
+        UpdatePasswordEvent updatePasswordEvent = UpdatePasswordEvent.builder()
+                .uuid( UUID.randomUUID() )
+                .username(username)
+                .password( password.getNewPassword() )
+                .build();
+        return userService.updatePasswordByUsername(updatePasswordEvent) ;
     }
 
 }

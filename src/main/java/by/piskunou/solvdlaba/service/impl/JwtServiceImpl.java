@@ -4,14 +4,12 @@ import by.piskunou.solvdlaba.domain.User;
 import by.piskunou.solvdlaba.service.JwtService;
 import com.auth0.jwt.JWT;
 import com.auth0.jwt.algorithms.Algorithm;
-import com.auth0.jwt.exceptions.JWTDecodeException;
 import com.auth0.jwt.exceptions.JWTVerificationException;
 import com.auth0.jwt.interfaces.DecodedJWT;
 import com.auth0.jwt.interfaces.JWTVerifier;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
-import reactor.core.publisher.Mono;
 
 import java.time.Instant;
 import java.time.ZonedDateTime;
@@ -23,18 +21,14 @@ public class JwtServiceImpl implements JwtService {
     private String secretKey;
 
     @Override
-    public Mono<String> extractUsername(String jwt) {
-        try {
-            DecodedJWT decodedJwt = JWT.decode(jwt);
-            return Mono.just( decodedJwt.getClaim("username").asString() );
-        } catch (JWTDecodeException e) {
-            return Mono.error(e);
-        }
+    public String extractUsername(String jwt) {
+        DecodedJWT decodedJwt = JWT.decode(jwt);
+        return decodedJwt.getClaim("username").asString();
     }
 
     @Override
-    public Mono<String> generateAccessToken(User user) {
-        String jwt = JWT.create()
+    public String generateAccessToken(User user) {
+        return JWT.create()
                 .withSubject("Access token")
                 .withClaim("username", user.getUsername())
                 .withClaim("email", user.getEmail())
@@ -42,19 +36,17 @@ public class JwtServiceImpl implements JwtService {
                 .withIssuedAt(Instant.now())
                 .withExpiresAt( ZonedDateTime.now().plusHours(1).toInstant() )
                 .sign(Algorithm.HMAC256(secretKey));
-        return Mono.just(jwt);
     }
 
     @Override
-    public Mono<String> generateRefreshToken(User user) {
-        String jwt = JWT.create()
+    public String generateRefreshToken(User user) {
+        return JWT.create()
                   .withSubject("Refresh token")
                   .withClaim("username", user.getUsername())
                   .withIssuer("Airport")
                   .withIssuedAt(Instant.now())
                   .withExpiresAt( ZonedDateTime.now().plusWeeks(1).toInstant() )
                   .sign(Algorithm.HMAC256(secretKey));
-        return Mono.just(jwt);
     }
 
     @Override
@@ -69,16 +61,16 @@ public class JwtServiceImpl implements JwtService {
     }
 
     @Override
-    public Mono<Boolean> isValidAccessToken(String jwt) {
+    public boolean isValidAccessToken(String jwt) {
         try {
             JWTVerifier verifier = JWT.require(Algorithm.HMAC256(secretKey))
                                       .withSubject("Access token")
                                       .withIssuer("Airport")
                                       .build();
             verifier.verify(jwt);
-            return Mono.just(true);
+            return true;
         } catch (JWTVerificationException e) {
-            return Mono.just(false);
+            return false;
         }
     }
 
