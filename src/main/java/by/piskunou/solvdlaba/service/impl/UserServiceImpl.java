@@ -1,11 +1,11 @@
 package by.piskunou.solvdlaba.service.impl;
 
-import by.piskunou.solvdlaba.domain.UpdatePasswordEvent;
 import by.piskunou.solvdlaba.domain.User;
+import by.piskunou.solvdlaba.domain.event.UpdatePasswordEvent;
 import by.piskunou.solvdlaba.service.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
-import org.springframework.web.client.RestTemplate;
+import org.springframework.web.reactive.function.client.WebClient;
 import reactor.core.publisher.Mono;
 import reactor.kafka.sender.KafkaSender;
 import reactor.kafka.sender.SenderRecord;
@@ -14,18 +14,30 @@ import reactor.kafka.sender.SenderRecord;
 @RequiredArgsConstructor
 public class UserServiceImpl implements UserService {
 
-    private final RestTemplate restTemplate;
     private final String baseUrl = "http://micro-airport-core/users";
+    private final WebClient.Builder webClientBuilder;
     private final KafkaSender<String, UpdatePasswordEvent> sender;
 
     @Override
     public User findByUsername(String username) {
-        return restTemplate.getForObject(baseUrl + "/username?" + username, User.class);
+        return webClientBuilder.baseUrl(baseUrl)
+                .build()
+                .get()
+                .uri("/username?username=" + username)
+                .retrieve()
+                .bodyToMono(User.class)
+                .block();
     }
 
     @Override
     public User findByEmail(String email) {
-        return restTemplate.getForObject(baseUrl + "/email?" + email, User.class);
+        return webClientBuilder.baseUrl(baseUrl)
+                .build()
+                .get()
+                .uri("/email?email=" + email)
+                .retrieve()
+                .bodyToMono(User.class)
+                .block();
     }
 
     @Override
@@ -36,7 +48,7 @@ public class UserServiceImpl implements UserService {
                                         "updatePassword",
                                         0,
                                         System.currentTimeMillis(),
-                                        "key",
+                                        updatePasswordEvent.getUuid().toString(),
                                         updatePasswordEvent,
                                         null
                                 )))

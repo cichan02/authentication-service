@@ -1,7 +1,6 @@
 package by.piskunou.solvdlaba.service.impl;
 
-import by.piskunou.solvdlaba.domain.UserDetailsImpl;
-import by.piskunou.solvdlaba.domain.exception.NoSuchClaimException;
+import by.piskunou.solvdlaba.domain.User;
 import by.piskunou.solvdlaba.service.JwtService;
 import com.auth0.jwt.JWT;
 import com.auth0.jwt.algorithms.Algorithm;
@@ -29,16 +28,16 @@ public class JwtServiceImpl implements JwtService {
             DecodedJWT decodedJwt = JWT.decode(jwt);
             return Mono.just( decodedJwt.getClaim("username").asString() );
         } catch (JWTDecodeException e) {
-            return Mono.error(new NoSuchClaimException("There's no username claim in jwt-token"));
+            return Mono.error(e);
         }
     }
 
     @Override
-    public Mono<String> generateAccessToken(UserDetailsImpl userDetails) {
+    public Mono<String> generateAccessToken(User user) {
         String jwt = JWT.create()
                 .withSubject("Access token")
-                .withClaim("username", userDetails.getUsername())
-                .withClaim("email", userDetails.getUser().getEmail())
+                .withClaim("username", user.getUsername())
+                .withClaim("email", user.getEmail())
                 .withIssuer("Airport")
                 .withIssuedAt(Instant.now())
                 .withExpiresAt( ZonedDateTime.now().plusHours(1).toInstant() )
@@ -47,10 +46,10 @@ public class JwtServiceImpl implements JwtService {
     }
 
     @Override
-    public Mono<String> generateRefreshToken(UserDetails userDetails) {
+    public Mono<String> generateRefreshToken(User user) {
         String jwt = JWT.create()
                   .withSubject("Refresh token")
-                  .withClaim("username", userDetails.getUsername())
+                  .withClaim("username", user.getUsername())
                   .withIssuer("Airport")
                   .withIssuedAt(Instant.now())
                   .withExpiresAt( ZonedDateTime.now().plusWeeks(1).toInstant() )
@@ -59,15 +58,14 @@ public class JwtServiceImpl implements JwtService {
     }
 
     @Override
-    public Mono<String> generateEditPasswordToken(UserDetails userDetails) {
-        String jwt = JWT.create()
+    public String generateEditPasswordToken(UserDetails userDetails) {
+        return JWT.create()
                 .withSubject("Edit password token")
                 .withClaim("username", userDetails.getUsername())
                 .withIssuer("Airport")
                 .withIssuedAt(Instant.now())
                 .withExpiresAt( ZonedDateTime.now().plusMinutes(5).toInstant() )
                 .sign(Algorithm.HMAC256(secretKey));
-        return Mono.just(jwt);
     }
 
     @Override
@@ -85,30 +83,30 @@ public class JwtServiceImpl implements JwtService {
     }
 
     @Override
-    public Mono<Boolean> isValidRefreshToken(String jwt) {
+    public boolean isValidRefreshToken(String jwt) {
         try {
             JWTVerifier verifier = JWT.require(Algorithm.HMAC256(secretKey))
                                       .withSubject("Refresh token")
                                       .withIssuer("Airport")
                                       .build();
             verifier.verify(jwt);
-            return Mono.just(true);
+            return true;
         } catch (JWTVerificationException e) {
-            return Mono.just(false);
+            return false;
         }
     }
 
     @Override
-    public Mono<Boolean> isValidEditPasswordToken(String jwt) {
+    public boolean isValidEditPasswordToken(String jwt) {
         try {
             JWTVerifier verifier = JWT.require(Algorithm.HMAC256(secretKey))
                                       .withSubject("Edit password token")
                                       .withIssuer("Airport")
                                       .build();
             verifier.verify(jwt);
-            return Mono.just(true);
+            return true;
         } catch (JWTVerificationException e) {
-            return Mono.just(false);
+            return false;
         }
     }
 

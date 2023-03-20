@@ -1,7 +1,8 @@
 package by.piskunou.solvdlaba.config;
 
-import by.piskunou.solvdlaba.domain.SendEmailEvent;
-import by.piskunou.solvdlaba.domain.UpdatePasswordEvent;
+import by.piskunou.solvdlaba.domain.event.SendEmailEvent;
+import by.piskunou.solvdlaba.domain.event.UpdatePasswordEvent;
+import by.piskunou.solvdlaba.kafka.TextXpath;
 import com.jcabi.xml.XML;
 import lombok.RequiredArgsConstructor;
 import org.apache.kafka.clients.consumer.ConsumerConfig;
@@ -28,8 +29,8 @@ public class KafkaSenderConfig {
         Map<String, Object> props = new HashMap<>();
         props.put(ProducerConfig.BOOTSTRAP_SERVERS_CONFIG, bootstrapAddress);
         props.put(ConsumerConfig.GROUP_ID_CONFIG, new TextXpath(this.settings, "//groupId").toString());
-        props.put(ProducerConfig.KEY_SERIALIZER_CLASS_CONFIG, new TextXpath(this.settings, "//keyDeserializer").toString());
-        props.put(ProducerConfig.VALUE_SERIALIZER_CLASS_CONFIG, new TextXpath(this.settings, "//maxPartitionFetchBytesConfig").toString());
+        props.put(ProducerConfig.KEY_SERIALIZER_CLASS_CONFIG, new TextXpath(this.settings, "//keySerializer").toString());
+        props.put(ProducerConfig.VALUE_SERIALIZER_CLASS_CONFIG, new TextXpath(this.settings, "//valueSerializer").toString());
         return props;
     }
 

@@ -1,6 +1,6 @@
 package by.piskunou.solvdlaba.service.impl;
 
-import by.piskunou.solvdlaba.domain.SendEmailEvent;
+import by.piskunou.solvdlaba.domain.event.SendEmailEvent;
 import by.piskunou.solvdlaba.service.EmailService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -22,7 +22,7 @@ public class EmailServiceImpl implements EmailService {
                                 "sendEmail",
                                 0,
                                 System.currentTimeMillis(),
-                                "key",
+                                sendEmailEvent.getUuid().toString(),
                                 sendEmailEvent,
                                 null
                         )))

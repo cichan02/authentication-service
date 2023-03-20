@@ -1,7 +1,9 @@
 package by.piskunou.solvdlaba.web.controller;
 
 import by.piskunou.solvdlaba.domain.AuthEntity;
+import by.piskunou.solvdlaba.domain.User;
 import by.piskunou.solvdlaba.service.AuthService;
+import by.piskunou.solvdlaba.service.JwtService;
 import by.piskunou.solvdlaba.web.dto.AuthEntityDTO;
 import by.piskunou.solvdlaba.web.dto.PasswordDTO;
 import by.piskunou.solvdlaba.web.mapper.AuthMapper;
@@ -24,6 +26,7 @@ import reactor.core.publisher.Mono;
 public class AuthController {
 
     private final AuthService authService;
+    private final JwtService jwtService;
     private final AuthMapper authMapper;
     private final PasswordMapper passwordMapper;
 
@@ -42,11 +45,39 @@ public class AuthController {
         return authService.createPassword(email);
     }
 
+    @GetMapping("/extract-username")
+    @Operation(summary = "Extract username from jwt-token")
+    @Parameter(name = "jwt", description = "jwt token")
+    public Mono<String> extractUsername(@RequestParam("jwt_token") String jwt) {
+        return jwtService.extractUsername(jwt);
+    }
+
+    @GetMapping("/valid-access-token")
+    @Operation(summary = "Validate access token")
+    @Parameter(name = "jwt", description = "Access jwt token")
+    public Mono<Boolean> isValidAccessToken(@RequestParam("jwt_token") String jwt) {
+        return jwtService.isValidAccessToken(jwt);
+    }
+
     @PostMapping("/password/edit")
     @Operation(summary = "Set up new password")
     @Parameter(name = "token", description = "one-time token to set new password")
     public Mono<Void> editPassword(@RequestParam("reset_password_token") String token, @RequestBody @Validated(PasswordDTO.onEdit.class) PasswordDTO dto) {
         return authService.editPassword(token, passwordMapper.toEntity(dto));
+    }
+
+    @PostMapping("/generate-token/access")
+    @Operation(summary = "Generate access token")
+    @Parameter(name = "userDetails", description = "User's details for generating access token")
+    public Mono<String> generateAccessToken(@RequestBody User user) {
+        return jwtService.generateAccessToken(user);
+    }
+
+    @PostMapping("/generate-token/refresh")
+    @Operation(summary = "Generate refresh token")
+    @Parameter(name = "userDetails", description = "User's details for generating refresh token")
+    public Mono<String> generateRefreshToken(@RequestBody User user) {
+        return jwtService.generateRefreshToken(user);
     }
 
 }

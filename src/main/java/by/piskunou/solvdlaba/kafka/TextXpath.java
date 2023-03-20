@@ -1,10 +1,8 @@
-package by.piskunou.solvdlaba.config;
+package by.piskunou.solvdlaba.kafka;
 
 import com.jcabi.xml.XML;
 import lombok.RequiredArgsConstructor;
-import org.springframework.stereotype.Component;
 
-@Component
 @RequiredArgsConstructor
 public final class TextXpath {
 
