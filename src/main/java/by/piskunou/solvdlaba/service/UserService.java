@@ -6,9 +6,9 @@ import reactor.core.publisher.Mono;
 
 public interface UserService {
 
-    User findByUsername(String username);
+    Mono<User> findByUsername(String username);
 
-    User findByEmail(String email);
+    Mono<User> findByEmail(String email);
 
     Mono<Void> updatePasswordByUsername(UpdatePasswordEvent updatePasswordEvent);
 

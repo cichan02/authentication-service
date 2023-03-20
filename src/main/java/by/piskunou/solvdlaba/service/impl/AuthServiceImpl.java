@@ -2,7 +2,6 @@ package by.piskunou.solvdlaba.service.impl;
 
 import by.piskunou.solvdlaba.domain.AuthEntity;
 import by.piskunou.solvdlaba.domain.Password;
-import by.piskunou.solvdlaba.domain.User;
 import by.piskunou.solvdlaba.domain.UserDetailsImpl;
 import by.piskunou.solvdlaba.domain.event.SendEmailEvent;
 import by.piskunou.solvdlaba.domain.event.UpdatePasswordEvent;
@@ -32,10 +31,9 @@ public class AuthServiceImpl implements AuthService {
             throw new AccessDeniedException("Access denied");
         }
         return jwtService.extractUsername( authEntity.getRefreshToken() )
-                .flatMap(username -> {
-                    User user =  userService.findByUsername(username);
-                    return jwtService.generateAccessToken( user );
-                }).flatMap(accessToken -> {
+                .flatMap(userService::findByUsername)
+                .flatMap(jwtService::generateAccessToken)
+                .flatMap(accessToken -> {
                     authEntity.setAccessToken( accessToken );
                     return Mono.just(authEntity);
                 });
@@ -44,16 +42,18 @@ public class AuthServiceImpl implements AuthService {
 
     @Override
     public Mono<Void> createPassword(String email) {
-        User user = userService.findByEmail(email);
-        UserDetailsImpl userDetails = new UserDetailsImpl(user);
-        String editPasswordToken = jwtService.generateEditPasswordToken( userDetails );
-        SendEmailEvent sendEmailEvent = SendEmailEvent.builder()
-                .uuid( UUID.randomUUID() )
-                .email(email)
-                .username(user.getUsername())
-                .token( editPasswordToken )
-                .build();
-        return emailService.sendMessage( sendEmailEvent );
+        return userService.findByEmail(email)
+                .flatMap(user -> {
+                    UserDetailsImpl userDetails = new UserDetailsImpl(user);
+                    String editPasswordToken = jwtService.generateEditPasswordToken( userDetails );
+                    SendEmailEvent sendEmailEvent = SendEmailEvent.builder()
+                            .uuid( UUID.randomUUID() )
+                            .email(email)
+                            .username(user.getUsername())
+                            .token( editPasswordToken )
+                            .build();
+                    return emailService.sendMessage( sendEmailEvent );
+                });
     }
 
     @Override

@@ -19,25 +19,23 @@ public class UserServiceImpl implements UserService {
     private final KafkaSender<String, UpdatePasswordEvent> sender;
 
     @Override
-    public User findByUsername(String username) {
+    public Mono<User> findByUsername(String username) {
         return webClientBuilder.baseUrl(baseUrl)
                 .build()
                 .get()
                 .uri("/username?username=" + username)
                 .retrieve()
-                .bodyToMono(User.class)
-                .block();
+                .bodyToMono(User.class);
     }
 
     @Override
-    public User findByEmail(String email) {
+    public Mono<User> findByEmail(String email) {
         return webClientBuilder.baseUrl(baseUrl)
                 .build()
                 .get()
                 .uri("/email?email=" + email)
                 .retrieve()
-                .bodyToMono(User.class)
-                .block();
+                .bodyToMono(User.class);
     }
 
     @Override
