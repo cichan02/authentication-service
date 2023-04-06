@@ -2,7 +2,6 @@ package by.piskunou.solvdlaba.service.impl;
 
 import by.piskunou.solvdlaba.domain.AuthEntity;
 import by.piskunou.solvdlaba.domain.Password;
-import by.piskunou.solvdlaba.domain.User;
 import by.piskunou.solvdlaba.domain.UserDetailsImpl;
 import by.piskunou.solvdlaba.domain.event.SendEmailEvent;
 import by.piskunou.solvdlaba.domain.event.UpdatePasswordEvent;
