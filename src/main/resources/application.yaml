@@ -2,22 +2,14 @@ spring:
   application:
     name: authentication-service
   config:
-    import: optional:.env[.properties]
+    import: optional:docker.env[.properties]
+
+  security:
+    user:
+      password: ${SECURITY_DEFAULT_PASSWORD}
 
   #Kafka
   kafka:
     bootstrap-servers: ${MAIN_HOST}:9092
 
 jwt-secret: ${JWT_SECRET}
-
-server:
-  port: 0
-
-eureka:
-  client:
-    service-host: ${MAIN_HOST}
-    service-url:
-      defaultZone: http://${eureka.client.service-host}:8761/eureka/
-  instance:
-    instance-id: ${spring.application.name}:${random.value}
-    hostname: ${MAIN_HOST}
