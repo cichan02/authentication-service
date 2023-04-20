@@ -10,6 +10,6 @@ spring:
 
   #Kafka
   kafka:
-    bootstrap-servers: ${MAIN_HOST}:9092
+    bootstrap-servers: ${KAFKA_HOST}:9092
 
 jwt-secret: ${JWT_SECRET}
