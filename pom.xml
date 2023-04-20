@@ -16,7 +16,7 @@
         <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
         <start-class>by.piskunou.solvdlaba.AuthenticationServiceApplication</start-class>
         <java.version>17</java.version>
-        <maven.version>3.9.0</maven.version>
+        <maven.version>3.9.1</maven.version>
         <spring-boot.version>3.0.5</spring-boot.version>
 
         <snakeyaml.version>2.0</snakeyaml.version>
