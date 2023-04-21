@@ -20,7 +20,7 @@
         <spring-boot.version>3.0.5</spring-boot.version>
 
         <snakeyaml.version>2.0</snakeyaml.version>
-        <eureka.version>4.0.0</eureka.version>
+        <eureka.version>4.0.1</eureka.version>
         <woodstox.version>6.5.0</woodstox.version>
         <gson.version>2.10.1</gson.version>
         <guava.version>31.1-jre</guava.version>
