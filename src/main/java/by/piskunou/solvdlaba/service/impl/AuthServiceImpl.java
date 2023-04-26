@@ -11,6 +11,7 @@ import by.piskunou.solvdlaba.service.JwtService;
 import by.piskunou.solvdlaba.service.UserService;
 import com.auth0.jwt.exceptions.JWTVerificationException;
 import lombok.RequiredArgsConstructor;
+import org.jetbrains.annotations.NotNull;
 import org.springframework.security.access.AccessDeniedException;
 import org.springframework.stereotype.Service;
 import reactor.core.publisher.Mono;
@@ -26,7 +27,7 @@ public class AuthServiceImpl implements AuthService {
     private final EmailService emailService;
 
     @Override
-    public Mono<AuthEntity> refresh(AuthEntity authEntity) {
+    public Mono<AuthEntity> refresh(@NotNull AuthEntity authEntity) {
         if ( !jwtService.isValidRefreshToken( authEntity.getRefreshToken() )) {
             throw new AccessDeniedException("Access denied");
         }
