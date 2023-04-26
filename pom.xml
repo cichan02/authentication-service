@@ -32,6 +32,7 @@
         <spring-cloud.loadbalancer.version>4.0.2</spring-cloud.loadbalancer.version>
         <caffeine.version>3.1.6</caffeine.version>
         <jetbrains.annotations.version>24.0.1</jetbrains.annotations.version>
+        <netty.version>4.1.91.Final</netty.version>
 
         <maven.clean.version>3.2.0</maven.clean.version>
         <maven.compiler.version>3.11.0</maven.compiler.version>
@@ -159,6 +160,14 @@
             <groupId>org.jetbrains</groupId>
             <artifactId>annotations</artifactId>
             <version>${jetbrains.annotations.version}</version>
+        </dependency>
+
+        <dependency>
+            <groupId>io.netty</groupId>
+            <artifactId>netty-resolver-dns-native-macos</artifactId>
+            <scope>runtime</scope>
+            <classifier>osx-aarch_64</classifier>
+            <version>${netty.version}</version>
         </dependency>
     </dependencies>
 
