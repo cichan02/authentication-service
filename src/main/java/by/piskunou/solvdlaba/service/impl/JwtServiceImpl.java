@@ -7,6 +7,7 @@ import com.auth0.jwt.algorithms.Algorithm;
 import com.auth0.jwt.exceptions.JWTVerificationException;
 import com.auth0.jwt.interfaces.DecodedJWT;
 import com.auth0.jwt.interfaces.JWTVerifier;
+import org.jetbrains.annotations.NotNull;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
@@ -27,7 +28,7 @@ public class JwtServiceImpl implements JwtService {
     }
 
     @Override
-    public String generateAccessToken(User user) {
+    public String generateAccessToken(@NotNull User user) {
         return JWT.create()
                 .withSubject("Access token")
                 .withClaim("username", user.getUsername())
@@ -39,7 +40,7 @@ public class JwtServiceImpl implements JwtService {
     }
 
     @Override
-    public String generateRefreshToken(User user) {
+    public String generateRefreshToken(@NotNull User user) {
         return JWT.create()
                   .withSubject("Refresh token")
                   .withClaim("username", user.getUsername())
@@ -50,7 +51,7 @@ public class JwtServiceImpl implements JwtService {
     }
 
     @Override
-    public String generateEditPasswordToken(UserDetails userDetails) {
+    public String generateEditPasswordToken(@NotNull UserDetails userDetails) {
         return JWT.create()
                 .withSubject("Edit password token")
                 .withClaim("username", userDetails.getUsername())
