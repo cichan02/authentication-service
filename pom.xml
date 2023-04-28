@@ -6,7 +6,7 @@
 
     <groupId>by.piskunou.solvdlaba</groupId>
     <artifactId>authentication-service</artifactId>
-    <version>0.0.1-SNAPSHOT</version>
+    <version>0.1.1-SNAPSHOT</version>
     <packaging>jar</packaging>
     <name>authentication-service</name>
     <description>Service to authenticate users</description>
@@ -23,6 +23,7 @@
         <spring-cloud.dependencies.version>2022.0.2</spring-cloud.dependencies.version>
         <slf4j.version>2.0.7</slf4j.version>
         <jackson.version>2.14.2</jackson.version>
+        <json-smart.version>2.4.10</json-smart.version>
         <lombok.version>1.18.26</lombok.version>
         <mapstruct.version>1.5.3.Final</mapstruct.version>
         <spring.doc.version>2.1.0</spring.doc.version>
@@ -32,7 +33,7 @@
         <spring-cloud.loadbalancer.version>4.0.2</spring-cloud.loadbalancer.version>
         <caffeine.version>3.1.6</caffeine.version>
         <jetbrains.annotations.version>24.0.1</jetbrains.annotations.version>
-        <netty.version>4.1.91.Final</netty.version>
+        <netty.version>4.1.92.Final</netty.version>
 
         <maven.clean.version>3.2.0</maven.clean.version>
         <maven.compiler.version>3.11.0</maven.compiler.version>
@@ -77,6 +78,12 @@
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-test</artifactId>
             <version>${spring-boot.version}</version>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>net.minidev</groupId>
+            <artifactId>json-smart</artifactId>
+            <version>${json-smart.version}</version>
             <scope>test</scope>
         </dependency>
 
@@ -164,9 +171,7 @@
 
         <dependency>
             <groupId>io.netty</groupId>
-            <artifactId>netty-resolver-dns-native-macos</artifactId>
-            <scope>runtime</scope>
-            <classifier>osx-aarch_64</classifier>
+            <artifactId>netty-all</artifactId>
             <version>${netty.version}</version>
         </dependency>
     </dependencies>
