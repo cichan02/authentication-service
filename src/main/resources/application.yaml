@@ -1,6 +1,8 @@
 spring:
   application:
     name: authentication-service
+  profiles:
+    active: default
   config:
     import: optional:docker.env[.properties]
 

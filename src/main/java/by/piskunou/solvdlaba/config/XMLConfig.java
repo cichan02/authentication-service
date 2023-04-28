@@ -6,14 +6,16 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.util.ResourceUtils;
 
-import java.io.FileNotFoundException;
+import java.io.IOException;
 
 @Configuration
 public class XMLConfig {
 
     @Bean
-    public XML producerXml() throws FileNotFoundException {
-        return new XMLDocument( ResourceUtils.getFile("classpath:kafka/producer.xml") );
+    public XML producerXml() throws IOException {
+        return new XMLDocument(
+                ResourceUtils.getURL("classpath:kafka/producer.xml").openStream()
+        );
     }
 
 }
